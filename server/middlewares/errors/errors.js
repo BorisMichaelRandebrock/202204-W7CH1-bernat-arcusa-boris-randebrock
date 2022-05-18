@@ -1,8 +1,8 @@
-const debug = require("debug")("robots:server:errors");
+const debug = require("debug")("series:server:errors");
 const chalk = require("chalk");
 
 const notFoundError = (req, res) => {
-  res.status(404).json({ msg: "Any endpoint found" });
+  res.status(404).json({ msg: "No endpoint found" });
 };
 
 // eslint-disable-next-line no-unused-vars
