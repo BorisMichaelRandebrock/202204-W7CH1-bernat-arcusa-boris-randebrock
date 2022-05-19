@@ -17,7 +17,6 @@ const userLogin = async (req, res, next) => {
     next(error);
   }
   const UserData = {
-    id: user.id,
     username: user.username,
   };
 
@@ -34,4 +33,34 @@ const userLogin = async (req, res, next) => {
   }
 };
 
-module.exports = { userLogin };
+const userRegister = async (req, res, next) => {
+  const { username, password } = req.body;
+
+  const user = await User.findOne({ username });
+
+  if (user) {
+    const error = await new Error("User already exists");
+    error.statusCode = 409;
+    error.customMessage = "User already exists";
+
+    next(error);
+  }
+
+  const encryptedPassword = await bcrypt.hash(password, 10);
+
+  try {
+    const userData = await User.create({
+      username,
+      password: encryptedPassword,
+    });
+
+    res
+      .status(201)
+      .json({ userData: { username: userData.username, id: userData.id } });
+  } catch (error) {
+    error.statusCode = 400;
+    error.customMessage = "Wrong user data";
+  }
+};
+
+module.exports = { userLogin, userRegister };
