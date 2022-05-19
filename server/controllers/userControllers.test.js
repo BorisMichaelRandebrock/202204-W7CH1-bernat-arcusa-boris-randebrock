@@ -30,5 +30,12 @@ describe("Given the userControllers function", () => {
 
       expect(res.status).toHaveBeenCalledWith(statusCode);
     });
+    test("Then it should return a match", async () => {
+      await userLogin(req, res, next);
+
+      const expectedToken = process.env.NUESTRO_TOKEN;
+
+      expect(res.json).toHaveBeenCalledWith({ expectedToken });
+    });
   });
 });
